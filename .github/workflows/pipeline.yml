@@ -13,9 +13,9 @@ jobs:
 
     steps:
     - name: checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Use Node.js version 20.x
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 20.x
         cache: 'npm'
@@ -23,3 +23,22 @@ jobs:
     - run: npm run test:unit
     - name: Display SoftUni username
       run: echo "and1teachera"
+  build_and_run_ui_tests:
+    runs-on: ubuntu-latest
+    needs: build_and_run_unit_tests
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+    - name: Install dependencies 
+      run: npm install
+    - name: Start app
+      run: npm start &
+    - name: Install playwright browsers
+      run: npx playwright install
+    - name: Run ui tests
+      run: npm run test:ui
